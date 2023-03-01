@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   RefreshControl,
+  TouchableWithoutFeedback,
 } from "react-native";
 import Kampanya from "../assets/kampanya1.jpeg"
 import Kizilay from "../assets/kizilay.jpg"
@@ -24,6 +25,8 @@ import GetirBottom from "./GetirBottom";
 
 const screenHeight = Dimensions.get("screen").height;
 const screenWidth = Dimensions.get("screen").width;
+
+const justDoIt = () => {} ;
 
 
 export default function GetirFood() {
@@ -48,7 +51,11 @@ export default function GetirFood() {
           }
         >
           <Image source={Kampanya} style={styles.campainImages} />
-          <View style={styles.searchBarArea}>
+          <TouchableWithoutFeedback
+           style={styles.searchBarArea}
+
+
+           >
             <View style={styles.searchBar}>
               <View style={styles.searchContain}>
                 <Image
@@ -74,7 +81,7 @@ export default function GetirFood() {
                 />
               </View>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
           <Text style={styles.containerText}>{"Earthquake Aid"}</Text>
           <AddEarthquakeAid
             name={"Deprem Yardımı / AFAD"}
