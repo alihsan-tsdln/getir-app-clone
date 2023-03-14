@@ -9,27 +9,90 @@ import {
   ScrollView,
   RefreshControl,
   TouchableWithoutFeedback,
+  FlatList,
 } from "react-native";
 import Kampanya from "../assets/kampanya1.jpeg"
-import Kizilay from "../assets/kizilay.jpg"
-import Afad from "../assets/afad.jpg"
-import Mudavim from "../assets/mudavim.png"
-import Discount from "../assets/discount.png"
 
-import AddCuisines from "./AddCuisines";
-import AddEarthquakeAid from "./AddEarthquakeAid";
-import AddRestaurant from "./AddRestaurant";
-import GetirTop from "./GetirTop";
-import View1Button from "./View1Button";
-import GetirBottom from "./GetirBottom";
+import AddCuisines from "../components/AddCuisines"
+import AddEarthquakeAid from "../components/AddEarthquakeAid";
+import AddRestaurant from "../components/AddRestaurant";
+import View1Button from "../components/View1Button";
+import GetirTop from "../components/GetirTop";
 
 const screenHeight = Dimensions.get("screen").height;
 const screenWidth = Dimensions.get("screen").width;
 
-const justDoIt = () => {} ;
+let restaurantList = [
+  {
+    name: "Komagene Etsiz Çiğ Köfte, Kocasinan (Gesi Cad.)",
+    image: require("../assets/restaurants/cigKofte.jpeg"),
+    minute: "20-30",
+    price: "42.00",
+    starPoint: "4.5",
+    starCount: "(200+)",
+  },
+  {
+    name:"Mersin Express Tantuni, Kocasinan (Kocasinan",
+    image:require("../assets/restaurants/tantuni.jpg"),
+    minute:"30-40",
+    price:"30.00",
+    starPoint:"4.1",
+    starCount:"(200+)",
+  },
+  {
+    name: "Domino's Pizza, Melikgazi (Demokrasi Mah.)",
+    image: require("../assets/restaurants/pizza.jpeg"),
+    minute: "30-40",
+    price: "59.99",
+    starPoint: "4.5",
+    starCount: "(500+)",
+  },
+  {
+    name: "Şahin Yuvası Köşk Kebap (Beyazşehir Mah.)",
+    image: require("../assets/restaurants/tavukDoner.jpg"),
+    minute: "35-45",
+    price: "60.00",
+    starPoint: "3.9",
+    starCount: "(50+)",
+  },
+];
 
+const restaurantRender = ({ item }) => {
+  return (
+    <AddRestaurant
+      name= {item.name}
+      image={item.image}
+      minute={item.minute}
+      price={item.price}
+      starPoint={item.starPoint}
+      starCount={item.starCount}
+      styles={styles}
+    />
+  );
+}
 
-export default function GetirFood() {
+const aidList = [
+  { name: "Deprem Yardımı / AFAD", image: require("../assets/afad.jpg") },
+  { name: "Deprem Yardımı / Kızılay", image: require("../assets/kizilay.jpg") },
+];
+
+const aidRender = ({ item }) => {
+  return (
+    <AddEarthquakeAid name={item.name} image={item.image} styles={styles} />
+  );
+};
+
+const cuisinesList = [
+  { name: "Discounted", image: require("../assets/discount.png") },
+  { name: "Müdavim", image: require("../assets/mudavim.png") },
+  { name: "Çiğ Köfte", image: null },
+];
+
+const cuisinesRender = ({ item }) => {
+  return <AddCuisines name={item.name} image={item.image} styles={styles} />
+}
+
+export default function GetirFood({navigation}) {
     const [refresh, setRefresh] = useState(false);
 
     const onRefresh = () => {
@@ -40,132 +103,81 @@ export default function GetirFood() {
     }
 
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
         <GetirTop />
-        <ScrollView
-          stickyHeaderIndices={[1]}
+        <FlatList
           overScrollMode="never"
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
           }
-        >
-          <Image source={Kampanya} style={styles.campainImages} />
-          <TouchableWithoutFeedback
-           style={styles.searchBarArea}
-
-
-           >
-            <View style={styles.searchBar}>
-              <View style={styles.searchContain}>
-                <Image
-                  source={require("../assets/searchIcon.jpg")}
-                  style={{
-                    width: screenWidth / 16.1538,
-                    resizeMode: "contain",
-                    marginLeft: screenWidth / 25,
-                  }}
-                />
-                <Text style={styles.searchText}>{"  What do you want ?"}</Text>
-                <View style={{ width: screenWidth / 30 }} />
-                <Text style={[styles.searchText, { color: "#5D3EBD" }]}>
-                  {"     Filter & Sort  "}
+          ListHeaderComponent={
+            <Image source={Kampanya} style={styles.campainImages} />
+          }
+          data={[0]}
+          stickyHeaderIndices = {[1]}
+          renderItem={() => {
+            return (
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate("Search")}
+                style={styles.searchBarArea}
+              >
+                <View style={styles.searchBar}>
+                  <View style={styles.searchContain}>
+                    <Image
+                      source={require("../assets/searchIcon.jpg")}
+                      style={{
+                        width: screenWidth / 16.1538,
+                        resizeMode: "contain",
+                        marginLeft: screenWidth / 25,
+                      }}
+                    />
+                    <Text style={styles.searchText}>
+                      {"  What do you want ?"}
+                    </Text>
+                    <View style={{ width: screenWidth / 30 }} />
+                    <Text style={[styles.searchText, { color: "#5D3EBD" }]}>
+                      {"     Filter & Sort  "}
+                    </Text>
+                    <Image
+                      source={require("../assets/settingsIcon.jpg")}
+                      style={{
+                        alignSelf: "center",
+                        width: screenWidth / 16.1538,
+                        resizeMode: "contain",
+                      }}
+                    />
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
+            );
+          }}
+          ListFooterComponent={
+            <>
+              <Text style={styles.containerText}>{"Earthquake Aid"}</Text>
+              <FlatList data={aidList} renderItem={aidRender} />
+              <Text style={styles.containerText}>Cuisines</Text>
+              <FlatList
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                data={cuisinesList}
+                renderItem={cuisinesRender}
+              />
+              <View style={{ flexDirection: "row" }}>
+                <Text style={styles.containerText}>
+                  {"All restourants (0)"}
                 </Text>
-                <Image
-                  source={require("../assets/settingsIcon.jpg")}
-                  style={{
-                    alignSelf: "center",
-                    width: screenWidth / 16.1538,
-                    resizeMode: "contain",
-                  }}
-                />
+                <View style={{ width: (screenWidth * 38.5) / 97.5 }}></View>
+                <View1Button />
               </View>
-            </View>
-          </TouchableWithoutFeedback>
-          <Text style={styles.containerText}>{"Earthquake Aid"}</Text>
-          <AddEarthquakeAid
-            name={"Deprem Yardımı / AFAD"}
-            image={Afad}
-            styles={styles}
-          />
-          <AddEarthquakeAid
-            name={"Deprem Yardımı / Kızılay"}
-            image={Kizilay}
-            styles={styles}
-          />
-          <Text style={styles.containerText}>Cuisines</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            overScrollMode="never"
-            style={{ width: screenWidth, left: screenWidth / 50 }}
-          >
-            <AddCuisines name={"Discounted"} image={Discount} styles={styles} />
-            <AddCuisines name={"Müdavim"} image={Mudavim} styles={styles} />
-            <AddCuisines name={"Çiğ Köfte"} image={null} styles={styles} />
-          </ScrollView>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.containerText}>{"All restourants (0)"}</Text>
-            <View style={{ width: (screenWidth * 38.5) / 97.5 }}></View>
-            <View1Button />
-          </View>
-
-          <ScrollView
-            style={{ width: (screenWidth * 96) / 100, alignSelf: "center" }}
-          >
-            <AddRestaurant
-              name="Komagene Etsiz Çiğ Köfte, Kocasinan (Gesi Cad.)"
-              image={require("../assets/restaurants/cigKofte.jpeg")}
-              minute={"20-30"}
-              price={"42.00"}
-              starPoint={"4.5"}
-              starCount={"(200+)"}
-              styles={styles}
-            />
-
-            <AddRestaurant
-              name="Mersin Express Tantuni, Kocasinan (Kocasinan"
-              image={require("../assets/restaurants/tantuni.jpg")}
-              minute={"30-40"}
-              price={"30.00"}
-              starPoint={"4.3"}
-              starCount={"(200+)"}
-              styles={styles}
-            />
-
-            <AddRestaurant
-              name="İldem Pide, Melikgazi (Cumhuriyet Mah. - İldem)"
-              image={require("../assets/restaurants/pide.jpg")}
-              minute={"60-70"}
-              price={"70.00"}
-              starPoint={"4.5"}
-              starCount={"(200+)"}
-              styles={styles}
-            />
-
-            <AddRestaurant
-              name="Domino's Pizza, Melikgazi (Demokrasi Mah.)"
-              image={require("../assets/restaurants/pizza.jpeg")}
-              minute={"30-40"}
-              price={"59.99"}
-              starPoint={"4.1"}
-              starCount={"(500+)"}
-              styles={styles}
-            />
-
-            <AddRestaurant
-              name="Şahin Yuvası Köşk Kebap (Beyazşehir Mah.)"
-              image={require("../assets/restaurants/tavukDoner.jpg")}
-              minute={"35-45"}
-              price={"60.00"}
-              starPoint={"3.9"}
-              starCount={"(50+)"}
-              styles={styles}
-            />
-          </ScrollView>
-          <View style={{ height: screenHeight / 4 }}></View>
-        </ScrollView>
-        <GetirBottom />
+              <FlatList
+                style={{ alignSelf: "center", width: screenWidth * 0.98 }}
+                data={restaurantList}
+                renderItem={restaurantRender}
+              />
+            </>
+          }
+        ></FlatList>
       </SafeAreaView>
     );
 }
@@ -184,7 +196,7 @@ export const styles = StyleSheet.create({
 
   searchBarArea: {
     width: screenWidth,
-    height: (screenHeight * 12) / 100,
+    height: (screenHeight * 8) / 100,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -198,6 +210,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 20,
     elevation: 5,
     justifyContent: "center",
+    left : screenWidth * 0.035,
   },
 
   searchText: {

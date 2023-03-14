@@ -7,12 +7,6 @@ const screenWidth = Dimensions.get("screen").width;
 export default function GetirTop() {
   return (
     <>
-      <View style={styles.getirTop}>
-        <View style={{ flexDirection: "row", flex: 1, alignItems: "center" }}>
-          <Text>{screenHeight + " X "}</Text>
-          <Text>{screenWidth}</Text>
-        </View>
-      </View>
       <View style={styles.adressEtaView}>
         <View style={styles.adressRect}>
           <Text style={styles.adressText}>Select Delivery Address</Text>
