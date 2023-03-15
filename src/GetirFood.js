@@ -6,7 +6,6 @@ import {
   Dimensions,
   StyleSheet,
   Image,
-  ScrollView,
   RefreshControl,
   TouchableWithoutFeedback,
   FlatList,
@@ -22,7 +21,7 @@ import GetirTop from "../components/GetirTop";
 const screenHeight = Dimensions.get("screen").height;
 const screenWidth = Dimensions.get("screen").width;
 
-let restaurantList = [
+const restaurantList = [
   {
     name: "Komagene Etsiz Çiğ Köfte, Kocasinan (Gesi Cad.)",
     image: require("../assets/restaurants/cigKofte.jpeg"),
