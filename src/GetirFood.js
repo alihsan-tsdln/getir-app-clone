@@ -81,13 +81,13 @@ const aidRender = ({ item }) => {
   );
 };
 
-const cuisinesList = [
+export const cuisinesList = [
   { name: "Discounted", image: require("../assets/discount.png") },
   { name: "Müdavim", image: require("../assets/mudavim.png") },
   { name: "Çiğ Köfte", image: null },
 ];
 
-const cuisinesRender = ({ item }) => {
+export const cuisinesRender = ({ item }) => {
   return <AddCuisines name={item.name} image={item.image} styles={styles} />
 }
 
@@ -114,11 +114,14 @@ export default function GetirFood({navigation}) {
             <Image source={Kampanya} style={styles.campainImages} />
           }
           data={[0]}
-          stickyHeaderIndices = {[1]}
+          stickyHeaderIndices={[1]}
           renderItem={() => {
             return (
               <TouchableWithoutFeedback
-                onPress={() => navigation.navigate("Search")}
+                onPress={() =>{
+                    navigation.navigate("Search")
+                    
+                }}
                 style={styles.searchBarArea}
               >
                 <View style={styles.searchBar}>
@@ -158,6 +161,7 @@ export default function GetirFood({navigation}) {
               <Text style={styles.containerText}>Cuisines</Text>
               <FlatList
                 horizontal={true}
+                style={{ height: screenHeight / 7.5 }}
                 showsHorizontalScrollIndicator={false}
                 data={cuisinesList}
                 renderItem={cuisinesRender}
@@ -271,6 +275,7 @@ export const styles = StyleSheet.create({
     width: (screenWidth * 34) / 100,
     marginLeft: screenWidth / 50,
     borderRadius: 12,
+    elevation : 2,
     backgroundColor: "white",
     justifyContent: "flex-end",
   },
