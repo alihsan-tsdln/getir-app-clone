@@ -2,6 +2,9 @@ import React from "react";
 import { SafeAreaView, Text, View, StyleSheet, Dimensions, TextInput, FlatList } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons"; 
 import AddPopularSearch from "../components/AddPopularSearch";
+import AddChain from "../components/AddChain";
+
+import { cuisinesList, cuisinesRender } from "./GetirFood";
 
 const screenHeight = Dimensions.get("screen").height;
 const screenWidth = Dimensions.get("screen").width;
@@ -27,6 +30,33 @@ const popularRender = ({item}) => {
     );
 }
 
+const chainList = [
+  {
+    name: "Burger King",
+    image: require("../assets/chains/burgerKingLogo.png"),
+  },
+  { name: "Popeyes", image: require("../assets/chains/Popeyes-Logo.png") },
+  {
+    name: "Dominos Pizza",
+    image: require("../assets/chains/dominosLogo.png"),
+  },
+  {
+    name: "Komagene Etsiz Çiğ Köfte",
+    image: require("../assets/chains/komageneLogo.jpg"),
+  },
+  { name: "Oses", image: require("../assets/chains/osesLogo.jpeg") },
+  {
+    name: "Usta Dönerci",
+    image: require("../assets/chains/ustaDonerciLogo.jpg"),
+  },
+];
+
+const chainRender = ({item}) => {
+  return (
+    <AddChain text={item.name} image= {item.image} />
+  );
+}
+
 export default function Search() {
     return (
       <SafeAreaView style={{ backgroundColor: "#F5F5F5" }}>
@@ -45,7 +75,7 @@ export default function Search() {
         <Text style={styles.popularText}>Popular Searches</Text>
         <FlatList
           horizontal
-          showsHorizontalScrollIndicator = {false}
+          showsHorizontalScrollIndicator={false}
           data={popularList}
           renderItem={popularRender}
           ListHeaderComponent={
@@ -55,8 +85,32 @@ export default function Search() {
             backgroundColor: "white",
             height: (screenHeight * 7) / 100,
             marginTop: screenHeight / 60,
-            elevation : 8,
+            elevation: 8,
           }}
+        />
+        <Text style={styles.popularText}>Chain Restaurant</Text>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={chainList}
+          renderItem={chainRender}
+          ListHeaderComponent={
+            <View style={{ paddingLeft: (screenWidth * 2) / 100 }} />
+          }
+          style={{
+            backgroundColor: "white",
+            height: (screenHeight * 7) / 100,
+            marginTop: screenHeight / 60,
+            elevation: 8,
+          }}
+        />
+        <Text style={[styles.popularText, {paddingBottom : screenHeight / 75}]}>Cuisines</Text>
+        <FlatList
+          style={{height : screenHeight / 7.5}}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          data={cuisinesList}
+          renderItem={cuisinesRender}
         />
       </SafeAreaView>
     );
