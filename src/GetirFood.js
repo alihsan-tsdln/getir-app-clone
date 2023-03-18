@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   SafeAreaView,
   View,
@@ -10,16 +10,21 @@ import {
   TouchableWithoutFeedback,
   FlatList,
 } from "react-native";
-import Kampanya from "../assets/kampanya1.jpeg"
+import Kampanya from "../assets/kampanya1.jpeg";
 
 import AddCuisines from "../components/AddCuisines"
 import AddEarthquakeAid from "../components/AddEarthquakeAid";
 import AddRestaurant from "../components/AddRestaurant";
 import View1Button from "../components/View1Button";
 import GetirTop from "../components/GetirTop";
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 const screenHeight = Dimensions.get("screen").height;
 const screenWidth = Dimensions.get("screen").width;
+
+import { useFonts } from "expo-font";
 
 const restaurantList = [
   {
@@ -92,7 +97,21 @@ export const cuisinesRender = ({ item }) => {
 }
 
 export default function GetirFood({navigation}) {
+
     const [refresh, setRefresh] = useState(false);
+    const [fontsLoaded] = useFonts({
+      "Alfabetica-SemiBold" : require("../assets/fonts/Alfabetica-SemiBold.ttf"),
+    });
+
+    const onLayoutRootView = useCallback(async() => {
+      if(fontsLoaded) {
+        await SplashScreen.hideAsync();
+      }
+    }, [fontsLoaded]);
+
+    if(!fontsLoaded) {
+      return null;
+    }
 
     const onRefresh = () => {
         setRefresh(true);
@@ -102,7 +121,7 @@ export default function GetirFood({navigation}) {
     }
 
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#F5F5F5" }} onLayout={onLayoutRootView}>
         <GetirTop />
         <FlatList
           overScrollMode="never"

@@ -62,8 +62,10 @@ const styles = StyleSheet.create({
   },
 
   adressText: {
+    fontFamily: "Alfabetica-SemiBold",
+    //fontWeight : "500",
     left: (screenWidth * 7) / 100,
-    fontSize: 14,
+    fontSize: 15,
     alignSelf: "center",
   },
 
