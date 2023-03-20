@@ -2,7 +2,7 @@ import GetirFood from "./src/GetirFood";
 import Search from "./src/Search";
 import Profile from "./src/Profile";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useState } from "react";
 
 import { Image, View, Dimensions, Text, TouchableOpacity } from "react-native";
 
@@ -37,8 +37,10 @@ const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 export default function App() {
 
   const bottomSheetRef = useRef(null);
+  const [statusBarColor, setStatusBarColor] = useState("#442D87");
 
   const handleBottomSheet = () => {
+    setStatusBarColor("#1C1235");
     bottomSheetRef.current?.present();
   };
 
@@ -65,6 +67,7 @@ export default function App() {
         style={containerStyle}
         onPress={() => {
           bottomSheetRef.current?.close();
+          setStatusBarColor("#442D87");
         }}
       />
     );
@@ -74,8 +77,8 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar style="light" translucent backgroundColor="#442D87" />
       <BottomSheetModalProvider>
+        <StatusBar style="light" translucent backgroundColor={statusBarColor} />
         <NavigationContainer>
           <Tab.Navigator
             initialRouteName="Home"
@@ -217,6 +220,7 @@ export default function App() {
           ref={bottomSheetRef}
           snapPoints={snapPoints}
           backdropComponent={StyledBackdrop}
+          onDismiss={() => setStatusBarColor("#442D87")}
         >
           <AddLocation />
         </BottomSheetModal>
