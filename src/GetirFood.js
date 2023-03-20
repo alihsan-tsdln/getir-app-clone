@@ -10,6 +10,8 @@ import {
   TouchableWithoutFeedback,
   FlatList,
 } from "react-native";
+
+
 import Kampanya from "../assets/kampanya1.jpeg";
 
 import AddCuisines from "../components/AddCuisines"
@@ -18,6 +20,8 @@ import AddRestaurant from "../components/AddRestaurant";
 import View1Button from "../components/View1Button";
 import GetirTop from "../components/GetirTop";
 import * as SplashScreen from 'expo-splash-screen';
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -96,112 +100,110 @@ export const cuisinesRender = ({ item }) => {
   return <AddCuisines name={item.name} image={item.image} styles={styles} />
 }
 
-export default function GetirFood({navigation}) {
+export default function GetirFood({button}) {
+  const [refresh, setRefresh] = useState(false);
+  const navigation = useNavigation();
 
-    const [refresh, setRefresh] = useState(false);
-    const [fontsLoaded] = useFonts({
-      "Alfabetica-SemiBold" : require("../assets/fonts/Alfabetica-SemiBold.ttf"),
-    });
+  const [fontsLoaded] = useFonts({
+    "Alfabetica-SemiBold": require("../assets/fonts/Alfabetica-SemiBold.ttf"),
+  });
 
-    const onLayoutRootView = useCallback(async() => {
-      if(fontsLoaded) {
-        await SplashScreen.hideAsync();
-      }
-    }, [fontsLoaded]);
-
-    if(!fontsLoaded) {
-      return null;
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
     }
+  }, [fontsLoaded]);
 
-    const onRefresh = () => {
-        setRefresh(true);
-        setTimeout(() => {
-            setRefresh(false);
-        }, 2000);
-    }
+  if (!fontsLoaded) {
+    return null;
+  }
 
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#F5F5F5" }} onLayout={onLayoutRootView}>
-        <GetirTop />
-        <FlatList
-          overScrollMode="never"
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-          }
-          ListHeaderComponent={
-            <Image source={Kampanya} style={styles.campainImages} />
-          }
-          data={[0]}
-          stickyHeaderIndices={[1]}
-          renderItem={() => {
-            return (
-              <TouchableWithoutFeedback
-                onPress={() =>{
-                    navigation.navigate("Search")
-                    
-                }}
-                style={styles.searchBarArea}
-              >
-                <View style={styles.searchBar}>
-                  <View style={styles.searchContain}>
-                    <Image
-                      source={require("../assets/searchIcon.jpg")}
-                      style={{
-                        width: screenWidth / 16.1538,
-                        resizeMode: "contain",
-                        marginLeft: screenWidth / 25,
-                      }}
-                    />
-                    <Text style={styles.searchText}>
-                      {"  What do you want ?"}
-                    </Text>
-                    <View style={{ width: screenWidth / 30 }} />
-                    <Text style={[styles.searchText, { color: "#5D3EBD" }]}>
-                      {"     Filter & Sort  "}
-                    </Text>
-                    <Image
-                      source={require("../assets/settingsIcon.jpg")}
-                      style={{
-                        alignSelf: "center",
-                        width: screenWidth / 16.1538,
-                        resizeMode: "contain",
-                      }}
-                    />
+  const onRefresh = () => {
+    setRefresh(true);
+    setTimeout(() => {
+      setRefresh(false);
+    }, 2000);
+  };
+
+  return (
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "#F5F5F5" }}
+      onLayout={onLayoutRootView}
+    >
+          <GetirTop button={button} />
+          <FlatList
+            overScrollMode="never"
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+            }
+            ListHeaderComponent={
+              <Image source={Kampanya} style={styles.campainImages} />
+            }
+            data={[0]}
+            stickyHeaderIndices={[1]}
+            renderItem={() => {
+              return (
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    navigation.navigate("Search");
+                  }}
+                  style={styles.searchBarArea}
+                >
+                  <View style={styles.searchBar}>
+                    <View style={styles.searchContain}>
+                      <FontAwesome
+                        style={{
+                          alignSelf: "center",
+                          paddingLeft: screenWidth / 28,
+                          paddingRight: screenWidth / 150,
+                        }}
+                        name="search"
+                        size={25}
+                        color={"grey"}
+                      />
+                      <Text style={styles.searchText}>
+                        {"  What do you want ?"}
+                      </Text>
+                      <View style={{ width: screenWidth / 50 }} />
+                      <Text style={[styles.searchText, { color: "#5D3EBD" }]}>
+                        {"     Filter & Sort  "}
+                      </Text>
+                      <Ionicons name="options" size={29} color="#5D3EBD" />
+                    </View>
                   </View>
+                </TouchableWithoutFeedback>
+              );
+            }}
+            ListFooterComponent={
+              <>
+                <Text style={styles.containerText}>{"Earthquake Aid"}</Text>
+                <FlatList data={aidList} renderItem={aidRender} />
+                <Text style={styles.containerText}>Cuisines</Text>
+                <FlatList
+                  horizontal={true}
+                  style={{ height: screenHeight / 7.5 }}
+                  showsHorizontalScrollIndicator={false}
+                  data={cuisinesList}
+                  renderItem={cuisinesRender}
+                />
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={styles.containerText}>
+                    {"All restourants (0)"}
+                  </Text>
+                  <View style={{ width: (screenWidth * 38.5) / 97.5 }}></View>
+                  <View1Button />
                 </View>
-              </TouchableWithoutFeedback>
-            );
-          }}
-          ListFooterComponent={
-            <>
-              <Text style={styles.containerText}>{"Earthquake Aid"}</Text>
-              <FlatList data={aidList} renderItem={aidRender} />
-              <Text style={styles.containerText}>Cuisines</Text>
-              <FlatList
-                horizontal={true}
-                style={{ height: screenHeight / 7.5 }}
-                showsHorizontalScrollIndicator={false}
-                data={cuisinesList}
-                renderItem={cuisinesRender}
-              />
-              <View style={{ flexDirection: "row" }}>
-                <Text style={styles.containerText}>
-                  {"All restourants (0)"}
-                </Text>
-                <View style={{ width: (screenWidth * 38.5) / 97.5 }}></View>
-                <View1Button />
-              </View>
-              <FlatList
-                style={{ alignSelf: "center", width: screenWidth * 0.98 }}
-                data={restaurantList}
-                renderItem={restaurantRender}
-              />
-            </>
-          }
-        ></FlatList>
-      </SafeAreaView>
-    );
+                <FlatList
+                  style={{ alignSelf: "center", width: screenWidth * 0.98 }}
+                  data={restaurantList}
+                  renderItem={restaurantRender}
+                />
+              </>
+            }
+          ></FlatList>
+    </SafeAreaView>
+  );
 }
 
 export const styles = StyleSheet.create({
