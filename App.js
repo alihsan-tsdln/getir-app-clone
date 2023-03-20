@@ -1,7 +1,8 @@
 import GetirFood from "./src/GetirFood";
 import Search from "./src/Search";
+import Profile from "./src/Profile";
 
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 
 import { Image, View, Dimensions, Text, TouchableOpacity } from "react-native";
 
@@ -25,6 +26,7 @@ import {
 } from "@expo/vector-icons";
 import AddLocation from "./components/AddLocation";
 import { StatusBar } from "expo-status-bar";
+import Prize from "./src/Prize";
 
 const Tab = createBottomTabNavigator();
 const screenHeight = Dimensions.get("screen").height;
@@ -68,11 +70,11 @@ export default function App() {
     );
   };
 
-  const snapPoints = [screenHeight * 0.28];
+  const snapPoints = [screenHeight * 0.3];
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-    <StatusBar style="auto" />
+      <StatusBar style="light" translucent backgroundColor="#442D87" />
       <BottomSheetModalProvider>
         <NavigationContainer>
           <Tab.Navigator
@@ -88,16 +90,7 @@ export default function App() {
               },
 
               tabBarIcon: ({ color, size }) => {
-                if (route.name === "Account") {
-                  return (
-                    <MaterialCommunityIcons
-                      style={{ top: 7 }}
-                      name="account"
-                      size={size * 1.4}
-                      color={color}
-                    />
-                  );
-                } else if (route.name === "Prize") {
+                if (route.name === "Prize") {
                   return (
                     <FontAwesome5
                       style={{ top: 7 }}
@@ -180,8 +173,44 @@ export default function App() {
               name="Search"
               component={Search}
             />
-            <Tab.Screen name="Account" component={GetirFood} />
-            <Tab.Screen name="Prize" component={GetirFood} />
+            <Tab.Screen
+              options={{
+                header: () => (
+                  <View
+                    style={{
+                      backgroundColor: "#5F3FBC",
+                      height: screenHeight / 10,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        top: 10,
+                        color: "white",
+                        fontWeight: "500",
+                        fontSize: 14,
+                      }}
+                    >
+                      Profile
+                    </Text>
+                  </View>
+                ),
+                tabBarIcon: ({ color, size }) => {
+                  return (
+                    <MaterialCommunityIcons
+                      style={{ top: 7 }}
+                      name="account"
+                      size={size * 1.4}
+                      color={color}
+                    />
+                  );
+                },
+              }}
+              name="Profile"
+              component={Profile}
+            />
+            <Tab.Screen name="Prize" component={Prize} />
           </Tab.Navigator>
         </NavigationContainer>
         <BottomSheetModal
