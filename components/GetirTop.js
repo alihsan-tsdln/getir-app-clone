@@ -3,10 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   Dimensions,
   Pressable,
-  Button
 } from "react-native";
 
 import { Entypo } from "@expo/vector-icons"; 

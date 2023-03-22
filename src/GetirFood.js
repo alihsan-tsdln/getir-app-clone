@@ -165,7 +165,7 @@ export default function GetirFood({button}) {
                       <Text style={styles.searchText}>
                         {"  What do you want ?"}
                       </Text>
-                      <View style={{ width: screenWidth / 50 }} />
+                      <View style={{ flex : 0.75 }} />
                       <Text style={[styles.searchText, { color: "#5D3EBD" }]}>
                         {"     Filter & Sort  "}
                       </Text>
