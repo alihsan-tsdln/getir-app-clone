@@ -90,20 +90,7 @@ export default function App() {
               tabBarStyle: {
                 backgroundColor: "white",
                 height: (screenHeight * 7) / 100,
-              },
-
-              tabBarIcon: ({ color, size }) => {
-                if (route.name === "Prize") {
-                  return (
-                    <FontAwesome5
-                      style={{ top: 7 }}
-                      name="gift"
-                      size={size}
-                      color={color}
-                    />
-                  );
-                }
-              },
+              }
             })}
           >
             <Tab.Screen
@@ -213,7 +200,36 @@ export default function App() {
               name="Profile"
               component={Profile}
             />
-            <Tab.Screen name="Prize" component={Prize} />
+            <Tab.Screen
+              options={{
+                header: () => (
+                  <View style={{ backgroundColor: "#5F3FBC" }}>
+                    <Image
+                      source={require("./assets/getirFoodLogo.jpg")}
+                      style={{
+                        width: screenWidth * 0.29,
+                        height: screenHeight / 10,
+                        alignSelf: "center",
+                        resizeMode: "contain",
+                        top: screenHeight / 65,
+                      }}
+                    />
+                  </View>
+                ),
+                tabBarIcon: ({ color, size }) => {
+                  return (
+                    <FontAwesome5
+                      style={{ top: 7 }}
+                      name="gift"
+                      size={size}
+                      color={color}
+                    />
+                  );
+                },
+              }}
+              name="Prize"
+              component={Prize}
+            />
           </Tab.Navigator>
         </NavigationContainer>
         <BottomSheetModal
